@@ -8,3 +8,4 @@ test*.c
 *.out
 *.log
 prog.py
+main.c
