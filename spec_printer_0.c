@@ -33,7 +33,7 @@ int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 
 	(void)fmt_info;
 	str = malloc(sizeof(char) * (size + 1));
-	if (str)
+	if (str && ptr)
 	{
 		mem_set(str, size, '0');
 		for (i = 0; i < 8; i++)
@@ -51,6 +51,13 @@ int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 			_putchar(*(str + i));
 		chars_count += size;
 		free(str);
+	}
+	else
+	{
+		_putstr("(nil)");
+		chars_count += 5;
+		if (str)
+			free(str);
 	}
 	return (chars_count);
 }
@@ -95,15 +102,18 @@ int convert_fmt_s(va_list *args_list, fmt_info_t *fmt_info)
 	char *str = va_arg(*args_list, char *);
 	char null_str[] = "(null)";
 
+	if (!str)
+		return (-1);
 	str = str ? str : null_str;
-	len = fmt_info->is_precision_set ? fmt_info->prec : str_len(str);
+	len = fmt_info->is_precision_set && fmt_info->prec >= 0
+		? fmt_info->prec : str_len(str);
 	if (!fmt_info->left)
 	{
 		for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 	}
 	chars_count += MAX(len, fmt_info->width) - len;
-	for (i = 0; i < len; i++)
+	for (i = 0; i < len && *(str + i) != '\0'; i++)
 		_putchar(*(str + i));
 	chars_count += len;
 	if (fmt_info->left)
