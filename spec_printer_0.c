@@ -20,7 +20,7 @@ void convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info)
  */
 void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, size = 8;
+	int i, size = 16;
 	void *ptr = va_arg(*args_list, void *);
 	long tmp = (long)ptr;
 	char *str;
@@ -30,7 +30,7 @@ void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 	if (str && ptr)
 	{
 		mem_set(str, size, '0');
-		for (i = 0; i < 8; i++)
+		for (i = 0; i < 16; i++)
 		{
 			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
 				: (tmp % 16) - 10 + 'a';
