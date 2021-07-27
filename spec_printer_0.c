@@ -67,8 +67,7 @@ void convert_fmt_c(va_list *args_list, fmt_info_t *fmt_info)
 		for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 	}
-	if (str != 0)
-		_putchar(str);
+	_putchar(str);
 	if (fmt_info->left)
 	{
 		for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
