@@ -48,7 +48,7 @@ void set_length(char cur, char nxt, fmt_info_t *fmt_info)
 
 /**
  * set_flags - Sets the flags in a format info struct
- * @cur: The flag character
+ * @str: The flag character string for set_flags
  * @fmt_info: The pointer to the destination fmt_info_t struct
  *
  * Return: The number of flags that were read
@@ -56,6 +56,7 @@ void set_length(char cur, char nxt, fmt_info_t *fmt_info)
 int set_flags(const char *str, fmt_info_t *fmt_info)
 {
 	int i = 0;
+
 	while (*(str + i) != '\0' && is_flag(*(str + i)))
 	{
 		fmt_info->space = *(str + i) == ' ' ? TRUE : fmt_info->space;
