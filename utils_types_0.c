@@ -61,11 +61,9 @@ char *long_to_str(long num)
 		}
 		if (sign < 0)
 			*(str + j) = '-';
-		while (*str == '0' && *(str + 1) != '\0')
-			left_shift(str, size);
-		return (str);
+		str = trim_start(str, '0', TRUE);
 	}
-	return (NULL);
+	return (str);
 }
 
 /**

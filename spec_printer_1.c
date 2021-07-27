@@ -12,40 +12,43 @@
  */
 void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, len = 0, zeros_count = 0;
+	int i, len = 0, zeros_count = 0, max_w, max_p, num_len;
 	long num;
-	char *str;
+	char *str, inv_plus;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, long);
 	else if (fmt_info->is_short)
-		num = va_arg(*args_list, int) >> 2 * 8;
-	else if (fmt_info->is_char)
-		num = va_arg(*args_list, int) >> 3 * 8;
+		num = (short)va_arg(*args_list, int);
 	else
 		num = va_arg(*args_list, int);
 	str = long_to_str(num);
 	if (str)
 	{
-		len += str_len(str);
-		if (fmt_info->is_precision_set)
-			zeros_count = fmt_info->prec - len > 0 ? fmt_info->prec - len : 0;
-		else if (fmt_info->is_width_set && fmt_info->pad == '0' && !fmt_info->left)
-			zeros_count = fmt_info->width - len > 0 ? fmt_info->width - len : 0;
-		len += zeros_count;
-		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-			_putchar(' ');
-		if (num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space)))
+		inv_plus = num >= 0 && (fmt_info->show_sign || fmt_info->space) ? 1 : 0;
+		if (fmt_info->is_precision_set && !fmt_info->prec && !num)
 		{
-			_putchar(num < 0 ? '-'
-				: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
+			print_repeat(' ', fmt_info->width);
 		}
-		for (i = 0; i < zeros_count; i++)
-			_putchar('0');
-		for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
-			_putchar(*(str + i));
-		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-			_putchar(' ');
+		else
+		{
+			num_len = str_len(str) + inv_plus;
+			max_w = MAX(fmt_info->width, num_len);
+			max_p = MAX(fmt_info->prec, num_len);
+			zeros_count = max_p - num_len;
+			len = max_w - (zeros_count + num_len);
+			for (i = 0; !fmt_info->left && i < len; i++)
+				_putchar(' ');
+			if (num < 0 || inv_plus)
+				_putchar(num < 0 ? '-'
+					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
+			for (i = 0; i < zeros_count; i++)
+				_putchar('0');
+			for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
+				_putchar(*(str + i));
+			for (i = 0; fmt_info->left && i < len; i++)
+				_putchar(' ');
+		}
 		free(str);
 	}
 }
@@ -59,41 +62,43 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
  */
 void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, size = 8, len = fmt_info->alt ? 2 : 0;
-	unsigned int num = va_arg(*args_list, unsigned int), tmp;
-	int zeros_count = num == 0 ? 1 : 0;
+	int i, len = 0, zeros_count = 0, max_w, max_p, num_len;
+	unsigned long num;
 	char *str;
 
-	str = malloc(sizeof(char) * (size));
+	if (fmt_info->is_short)
+		num = (short)va_arg(*args_list, unsigned int);
+	else if (fmt_info->is_long)
+		num = va_arg(*args_list, unsigned long);
+	else
+		num = va_arg(*args_list, unsigned int);
+	str = u_long_to_hex(num, fmt_info->spec == 'X');
 	if (str)
 	{
-		size = fmt_info->is_short ? 4 : (fmt_info->is_char ? 2 : 8);
-		mem_set(str, 8, 0);
-		tmp = num;
-		for (i = 0; i <= size && tmp > 0; i++, len++)
+		if (fmt_info->is_precision_set && !fmt_info->prec && !num)
 		{
-			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
-				: (tmp % 16) - 10 + 'a' + (fmt_info->spec == 'X' ? -6 - 26 : 0);
-			tmp /= 16;
+			print_repeat(' ', fmt_info->width);
 		}
-		if (fmt_info->is_precision_set)
-			zeros_count = fmt_info->prec - i > 0 ? fmt_info->prec - i : 0;
-		else if (fmt_info->is_width_set)
-			zeros_count = fmt_info->width - len > 0 ? fmt_info->width - len : 0;
-		len += zeros_count;
-		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-			_putchar(' ');
-		if (fmt_info->alt)
-			_putstr(fmt_info->spec == 'X' ? "0X" : "0x");
-		for (i = 0; i < zeros_count; i++)
-			_putchar('0');
-		for (i = size - 1; i >= 0; i--)
+		else
 		{
-			if (*(str + i) != '\0')
+			num_len = str_len(str) + (fmt_info->alt ? 2 : 0);
+			max_w = MAX(fmt_info->width, num_len);
+			max_p = MAX(fmt_info->prec, num_len);
+			zeros_count = max_p - num_len;
+			len = max_w - (zeros_count + num_len);
+			for (i = 0; !fmt_info->left && i < len; i++)
+				_putchar(' ');
+			if (fmt_info->alt)
+				_putstr(fmt_info->spec == 'X' ? "0X" : "0x");
+			for (i = 0; i < zeros_count; i++)
+				_putchar('0');
+			for (i = 0; *(str + i) != '\0'; i++)
+			{
 				_putchar(*(str + i));
+			}
+			for (i = 0; fmt_info->left && i < len; i++)
+				_putchar(' ');
 		}
-		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-			_putchar(' ');
 		free(str);
 	}
 }
@@ -107,8 +112,8 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
  */
 void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i = 0, zeros_count = 0, num_len = 0, len = 0;
-	unsigned long num, max_w, max_p;
+	int i = 0, zeros_count = 0, num_len = 0, len = 0, max_w, max_p;
+	unsigned long num;
 	char *str;
 
 	if (fmt_info->is_long)

@@ -172,6 +172,7 @@ char *div_by_10_exp(char *num, unsigned short n, char can_free);
 char *two_exp(short n);
 char *five_exp(unsigned short n);
 unsigned int two_pexp(unsigned int n);
+char *u_long_to_hex(unsigned long num, char upper);
 
 
 char *u_long_to_str(unsigned long num);
