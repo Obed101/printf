@@ -9,3 +9,4 @@ test*.c
 *.log
 prog.py
 main.c
+*#

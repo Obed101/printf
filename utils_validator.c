@@ -60,7 +60,7 @@ char is_specifier(char c)
 		{
 		case 'b':
 		case 'R':
-		case 'r':
+			/*case 'r':*/
 		case 'S':
 			return (TRUE);
 		default:
