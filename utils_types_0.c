@@ -20,20 +20,15 @@ char *u_long_to_str(unsigned long num)
 		*(str + size) = '\0';
 		mem_set(str, size, '0');
 		j = size - 1;
-		if (rem == 0)
-			*(str + j) = '0';
-
 		while (rem > 0)
 		{
 			*(str + j) = (rem % 10) + '0';
 			rem /= 10;
 			j--;
 		}
-		while (*str == '0' && *(str + 1) != '\0')
-			left_shift(str, size);
-		return (str);
+		str = trim_start(str, '0', TRUE);
 	}
-	return (NULL);
+	return (str);
 }
 
 /**

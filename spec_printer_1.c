@@ -151,7 +151,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, len = 0, zeros_count = 0, num_len;
 	unsigned long num, max_w, max_p;
-	char *str, p_0;
+	char *str;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
@@ -162,8 +162,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 	str = u_long_to_str(num);
 	if (str)
 	{
-		p_0 = fmt_info->is_precision_set && !fmt_info->prec && !num;
-		if (p_0)
+		if (fmt_info->is_precision_set && !fmt_info->prec && !num)
 		{
 			print_repeat(' ', fmt_info->width);
 		}
