@@ -83,11 +83,22 @@ void set_precision(const char *str, va_list args,
 {
 	fmt_info->is_precision_set = TRUE;
 	if (*(str + *i) == '*')
+	{
 		fmt_info->prec = va_arg(args, int);
+	}
 	else if (is_digit(*(str + *i)))
+	{
 		*i += set_number(str + *i, &(fmt_info->prec));
+	}
+	else if (is_specifier(*(str + *i)))
+	{
+		fmt_info->prec = 0;
+		(*i)--;
+	}
 	else
+	{
 		*error_status = -1;
+	}
 }
 
 /**

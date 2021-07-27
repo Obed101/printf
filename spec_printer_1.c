@@ -65,7 +65,7 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, chars_count = 0, size = 8, len = fmt_info->alt ? 2 : 0;
 	unsigned int num = va_arg(*args_list, unsigned int), tmp;
-	int zero_pads_count = 0;
+	int zero_pads_count = num == 0 ? 1 : 0;
 	char *str;
 
 	str = malloc(sizeof(char) * (size));
@@ -114,40 +114,38 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
  */
 int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i = 0, chars_count = 0, zero_pads_count = 0, size = 21, len = 0;
-	long num;
-	char *str;
+	int i = 0, chars_count = 0, zero_pads_count = 0, len = 0;
+	unsigned long num;
+	char *str, is_empty = fmt_info->prec == 0 && fmt_info->is_precision_set;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
-	else if (fmt_info->is_short || fmt_info->is_char)
-		num = va_arg(*args_list, unsigned int) >> (fmt_info->is_short ? 2 : 3) * 8;
 	else
-		num = va_arg(*args_list, unsigned int);
+		num = va_arg(*args_list, unsigned int) >> (fmt_info->is_short ? 2 : 0) * 8;
+	is_empty = num == 0 && is_empty;
 	str = long_to_oct(num);
 	if (str)
 	{
-		size = str_len(str);
-		len += size;
-		if (fmt_info->is_precision_set)
+		len = str_len(str);
+		if (fmt_info->is_precision_set && num > 0)
 			zero_pads_count = fmt_info->prec - len > 0 ? fmt_info->prec - len : 0;
-		else if (fmt_info->is_width_set)
-			zero_pads_count = fmt_info->width - len > 0 ? fmt_info->width - len : 0;
-		len += zero_pads_count + (fmt_info->alt && zero_pads_count == 0 ? 0 : 1);
-		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
+		i = (fmt_info->alt && zero_pads_count == 0) ? 1 : 0;
+		if (fmt_info->width > len)
+			len = is_empty ? fmt_info->width : fmt_info->width - str_len(str);
+		len -= (i + zero_pads_count);
+		chars_count += i + len + zero_pads_count;
+		for (i = 0; !fmt_info->left && i < len; i++)
 			_putchar(' ');
-		chars_count += MAX(len, fmt_info->width) - len + zero_pads_count;
-		if (fmt_info->alt && zero_pads_count == 0)
+		if ((fmt_info->alt && zero_pads_count == 0))
 			_putchar('0');
-		chars_count += (fmt_info->alt && zero_pads_count == 0 ? 1 : 0);
 		for (i = 0; i < zero_pads_count; i++)
 			_putchar('0');
-		for (i = 0; i < size; i++)
+		for (i = 0; i < str_len(str) && num > 0; i++)
 		{
 			_putchar(*(str + i));
 			chars_count++;
 		}
-		for (i = 0; fmt_info->left && i <= MAX(len, fmt_info->width) - len; i++)
+		for (i = 0; fmt_info->left && i < len; i++)
 			_putchar(' ');
 		free(str);
 	}
