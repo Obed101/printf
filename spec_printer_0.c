@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "holberton.h"
 
 /**
@@ -27,7 +28,7 @@ int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, chars_count = 0, size = 8;
 	void *ptr = va_arg(*args_list, void *);
-	unsigned long tmp;
+	long tmp = (long)ptr;
 	char *str;
 
 	(void)fmt_info;
@@ -35,8 +36,7 @@ int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 	if (str)
 	{
 		mem_set(str, size, '0');
-		tmp = ((unsigned long)ptr);
-		for (i = 0; i <= size && tmp > 0; i++)
+		for (i = 0; i < 8; i++)
 		{
 			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
 				: (tmp % 16) - 10 + 'a';
