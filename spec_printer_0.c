@@ -93,18 +93,19 @@ int convert_fmt_s(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, chars_count = 0, len;
 	char *str = va_arg(*args_list, char *);
-	char null_str[] = "";
+	char null_str[] = "(null)";
 
 	str = str ? str : null_str;
-	len = str_len(str);
+	len = fmt_info->is_precision_set ? fmt_info->prec : str_len(str);
 	if (!fmt_info->left)
 	{
 		for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 	}
 	chars_count += MAX(len, fmt_info->width) - len;
-	_putstr(str);
-	chars_count += str_len(str);
+	for (i = 0; i < len; i++)
+		_putchar(*(str + i));
+	chars_count += len;
 	if (fmt_info->left)
 	{
 		for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
