@@ -20,11 +20,10 @@ int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
 	{
 		mem_set(str, size, '\0');
 		tmp = num;
-		for (i = 0; i < size && tmp > 0; i++)
+		for (i = 0; i < size && tmp > 0; i++, len++)
 		{
 			*(str + i) = (tmp % 2) + '0';
 			tmp /= 2;
-			len++;
 		}
 		if (!fmt_info->left)
 		{
