@@ -9,10 +9,10 @@
  *
  * Return: The number of characters written
  */
-int convert_fmt_percent(va_list *args_list __attribute__((unused)),
-			fmt_info_t *fmt_info __attribute__((unused)))
+int convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info)
 {
-	_putchar('%');
+	(void)args_list;
+	_putchar(fmt_info->spec);
 	return (1);
 }
 
@@ -23,18 +23,19 @@ int convert_fmt_percent(va_list *args_list __attribute__((unused)),
  *
  * Return: The number of characters written
  */
-int convert_fmt_p(va_list *args_list,
-		  fmt_info_t *fmt_info __attribute__((unused)))
+int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, chars_count = 0, size = 16;
-	size_t num = va_arg(*args_list, size_t), tmp;
+	void *num = va_arg(*args_list, void *);
+	size_t tmp;
 	char *str;
 
+	(void)fmt_info;
 	str = malloc(sizeof(char) * (size));
 	if (str)
 	{
 		mem_set(str, 16, '0');
-		tmp = num;
+		tmp = ((size_t)&num);
 		for (i = 0; i <= size && tmp > 0; i++)
 		{
 			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'

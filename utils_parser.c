@@ -28,7 +28,7 @@ int set_number(const char *str, int *number)
 		}
 	}
 	*number = cmp_nums(digits, MAX_WIDTH) <= 0 ? str_to_int(digits) : 0;
-	return (i);
+	return (i - 1);
 }
 
 /**
@@ -62,6 +62,26 @@ void set_flags(char cur, fmt_info_t *fmt_info)
 }
 
 /**
+ * set_precision - Reads a format info data into the given struct
+ * @str: The string contained the format tokens
+ * @args: The arguments list
+ * @fmt_info: The pointer to the destination fmt_info_t struct
+ * @i: The pointer to the position in the format string
+ * @error_status: The pointer to the error variable
+ */
+void set_precision(const char *str, va_list args,
+	fmt_info_t *fmt_info, int *i, int *error_status)
+{
+	fmt_info->is_precision_set = TRUE;
+	if (*(str + *i) == '*')
+		fmt_info->prec = va_arg(args, int);
+	else if (is_digit(*(str + *i)))
+		*i += set_number(str + *i, &(fmt_info->prec));
+	else
+		*error_status = -1;
+}
+
+/**
  * read_format_info - Reads a format info data into the given struct
  * @str: The string contained the format tokens
  * @args: The arguments list
@@ -72,8 +92,7 @@ void set_flags(char cur, fmt_info_t *fmt_info)
  */
 int read_format_info(const char *str, va_list args, fmt_info_t *fmt_info)
 {
-	int i = 0;
-	char no_error = 1, order = 0;
+	int i = 0, no_error = 1, order = 0;
 
 	init_format_info(fmt_info);
 	for (; str && *(str + i) != '\0' && !fmt_info->spec && no_error == 1; i++)
@@ -87,7 +106,6 @@ int read_format_info(const char *str, va_list args, fmt_info_t *fmt_info)
 		{
 			set_length(*(str + i), *(str + i + 1), fmt_info);
 			i += *(str + i) == *(str + i + 1) ? 1 : 0;
-			order++;
 		}
 		else if (is_flag(*(str + i)) && order < 1)
 		{
@@ -100,24 +118,17 @@ int read_format_info(const char *str, va_list args, fmt_info_t *fmt_info)
 			else
 				i += set_number(str + i, &(fmt_info->width));
 			fmt_info->is_width_set = TRUE;
-			order++;
 		}
 		else if (*(str + i) == '.' && order < 3)
 		{
 			i++;
-			fmt_info->is_precision_set = TRUE;
-			if (*(str + i) == '*')
-				fmt_info->prec = va_arg(args, int);
-			else if (is_digit(*(str + i)))
-				i += set_number(str + i, &(fmt_info->prec));
-			else
-				no_error = -1;
-			order++;
+			set_precision(str, args, fmt_info, &i, &no_error);
 		}
 		else
 		{
 			no_error = -1;
 		}
+		order += !is_flag(*(str + i));
 	}
 	return (i * no_error);
 }

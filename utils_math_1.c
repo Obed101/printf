@@ -205,7 +205,8 @@ char *mul_float(char *left, char *right, char can_free)
 		old_size = size - 1;
 		product = mul_int(left_c, right_c, TRUE);
 		size = str_len(product) - old_size;
-		product = insert_char(product, size - MAX(frac_len1, frac_len2) + 1, '.', TRUE);
+		product = insert_char(product,
+			size - MAX(frac_len1, frac_len2) + 1, '.', TRUE);
 		product = trim_end(product, '0', TRUE);
 		if (can_free)
 		{

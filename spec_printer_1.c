@@ -25,8 +25,9 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 	else
 		num = va_arg(*args_list, int);
 	str = long_to_str(num);
-  len = num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space))
-		? 1 : 0;
+	len = num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space))
+						? 1
+						: 0;
 	if (str)
 	{
 		len += str_len(str);
@@ -37,8 +38,9 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		len += zero_pads_count;
 		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
-    if (num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space)))
-      _putchar(num < 0 ? '-' : (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
+		if (num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space)))
+			_putchar(num < 0 ? '-'
+				: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
 		for (i = 0; i < zero_pads_count; i++)
 			_putchar('0');
 		for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
@@ -50,77 +52,6 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		free(str);
 	}
 	return (chars_count);
-}
-
-/**
- * convert_fmt_fF - Prints the decimal representation of a double
- * @args_list: The arguments list
- * @fmt_info: The format info
- *
- * Return: The number of characters written
- */
-int convert_fmt_fF(va_list *args_list, fmt_info_t *fmt_info)
-{
-	int i, chars_count = 0, len;
-	double num = va_arg(*args_list, double);
-  /* int zero_pads_count = 0, exponent; */
-	char *str;
-  ushort_t exp_size = fmt_info->is_long_double ? 15 : 11;
-  ushort_t mant_size = fmt_info->is_long_double ? 64 : 52;
-  float_info_t *flt_info;
-
-  /* printf("fmt_fF--> %s\n", "product"); */
-	if (fmt_info->spec == 'F')/* Conversion is known but ignored */
-		return (0);
-  flt_info = new_float_info(exp_size, mant_size);
-  if (flt_info)
-  {
-    set_float_parts(num, exp_size, mant_size, flt_info);
-    str = is_invalid(flt_info);
-    if (!str)
-    {
-      str = float_to_str(flt_info, FALSE);
-      /* printf("fF--> %s\n", "product"); */
-      len = str_len(str);
-      /* if (fmt_info->is_precision_set)
-      // 	zero_pads_count = fmt_info->prec - i > 0 ? fmt_info->prec - i : 0;
-      // else if (fmt_info->is_width_set)
-      // 	zero_pads_count = fmt_info->width - len > 0 ? fmt_info->width - len : 0;
-      // len += zero_pads_count;
-      // for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-      // 	_putchar(' ');
-      // chars_count += MAX(len, fmt_info->width) - len + zero_pads_count;
-      // if (fmt_info->alt)
-      // 	_putstr(fmt_info->spec == 'X' ? "0X" : "0x");
-      // for (i = 0; i < zero_pads_count; i++)
-      // 	_putchar('0');
-			*/
-      for (i = 0; i < len; i++)
-      {
-        if (*(str + i) != '\0')
-        {
-          _putchar(*(str + i));
-          chars_count++;
-        }
-      }
-      /* for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
-      // 	_putchar(' ');
-			*/
-    }
-    else
-    {
-      len = str_len(str);
-      for (i = 0; i < len; i++)
-        _putchar(fmt_info->spec == 'f' ? TO_LOWER(str[i]) : TO_UPPER(str[i]));
-      chars_count += len;
-    }
-    if (str)
-      free(str);
-		/* printf("fF_end0--> %s\n", "product"); */
-    free_float_info(flt_info);
-		/* printf("fF_end1--> %s\n", "product"); */
-  }
-  return (chars_count);
 }
 
 /**
@@ -143,12 +74,11 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		size = fmt_info->is_short ? 4 : (fmt_info->is_char ? 2 : 8);
 		mem_set(str, 8, 0);
 		tmp = num;
-		for (i = 0; i <= size && tmp > 0; i++)
+		for (i = 0; i <= size && tmp > 0; i++, len++)
 		{
 			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
 				: (tmp % 16) - 10 + 'a' + (fmt_info->spec == 'X' ? -6 - 26 : 0);
 			tmp /= 16;
-			len++;
 		}
 		if (fmt_info->is_precision_set)
 			zero_pads_count = fmt_info->prec - i > 0 ? fmt_info->prec - i : 0;
@@ -165,10 +95,8 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		for (i = size - 1; i >= 0; i--)
 		{
 			if (*(str + i) != '\0')
-			{
 				_putchar(*(str + i));
-				chars_count++;
-			}
+			chars_count += (*(str + i) != '\0' ? 1 : 0);
 		}
 		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
@@ -190,37 +118,19 @@ int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 	long num;
 	char *str;
 
-  if (fmt_info->is_long)
-    num = va_arg(*args_list, long);
-  else if (fmt_info->is_short)
-    num = va_arg(*args_list, int) >> 2 * 8;
-  else if (fmt_info->is_char)
-    num = va_arg(*args_list, int) >> 3 * 8;
-  else
-    num = va_arg(*args_list, long);
-	str = malloc(sizeof(char) * (size));
+	if (fmt_info->is_long)
+		num = va_arg(*args_list, unsigned long);
+	else if (fmt_info->is_short || fmt_info->is_char)
+		num = va_arg(*args_list, unsigned int) >> (fmt_info->is_short ? 2 : 3) * 8;
+	else
+		num = va_arg(*args_list, unsigned int);
+	str = long_to_oct(num);
 	if (str)
 	{
-		mem_set(str, size, 0);
-    if (num == 0)
-    {
-      *(str + i++) = '0';
-      len++;
-    }
-    for (i = 0; i <= size && num < 0; i++)
-		{
-			*(str + i) =  (num % 8) + '0';
-			num /= 8;
-			len++;
-		}
-		for (i = 0; i <= size && num > 0; i++)
-		{
-			*(str + i) =  (num % 8) + '0';
-			num /= 8;
-			len++;
-		}
+		size = str_len(str);
+		len += size;
 		if (fmt_info->is_precision_set)
-			zero_pads_count = fmt_info->prec - i > 0 ? fmt_info->prec - i : 0;
+			zero_pads_count = fmt_info->prec - len > 0 ? fmt_info->prec - len : 0;
 		else if (fmt_info->is_width_set)
 			zero_pads_count = fmt_info->width - len > 0 ? fmt_info->width - len : 0;
 		len += zero_pads_count + (fmt_info->alt && zero_pads_count == 0 ? 0 : 1);
@@ -228,21 +138,16 @@ int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 			_putchar(' ');
 		chars_count += MAX(len, fmt_info->width) - len + zero_pads_count;
 		if (fmt_info->alt && zero_pads_count == 0)
-		{
-      _putchar('0');
-      chars_count++;
-    }
+			_putchar('0');
+		chars_count += (fmt_info->alt && zero_pads_count == 0 ? 1 : 0);
 		for (i = 0; i < zero_pads_count; i++)
 			_putchar('0');
-		for (i = size - 1; i >= 0; i--)
+		for (i = 0; i < size; i++)
 		{
-			if (*(str + i) != '\0')
-			{
-				_putchar(*(str + i));
-				chars_count++;
-			}
+			_putchar(*(str + i));
+			chars_count++;
 		}
-		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
+		for (i = 0; fmt_info->left && i <= MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 		free(str);
 	}

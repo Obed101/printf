@@ -20,21 +20,14 @@ char *div_by_10_exp(char *num, unsigned short n, char can_free)
 	len = str_len(num);
 	dec_pos = index_of(num, '.');
 	if (dec_pos < 0)
-	{
 		size = len - n > 0 ? len + 1 : (len - n == 0 ? len + 2 : n - len + len + 2);
-		new_pos = size - n - 1;
-	}
 	else if (dec_pos > 0)
-	{
-		size = dec_pos - n > 0 ? len :
-			(dec_pos - n == 0 ? len + 1 : len + (n - dec_pos + 1));
-		new_pos = size - (len - dec_pos + n);
-	}
+		size = dec_pos - n > 0 ? len
+			: (dec_pos - n == 0 ? len + 1 : len + (n - dec_pos + 1));
 	else
-	{
 		size = len + n + 1;
-		new_pos = 1;
-	}
+	new_pos = dec_pos < 0 ? size - n - 1
+		: (dec_pos > 0 ? size - (len - dec_pos + n) : 1);
 	result = malloc(sizeof(char) * (size + 1));
 	if (result)
 	{
@@ -89,8 +82,8 @@ char *two_exp(short n)
 		}
 		else if (n < 0)
 		{
-			pow_b5 = five_exp(0 - n);
-			result = div_by_10_exp(pow_b5, 0 - n, TRUE);
+			pow_b5 = five_exp(n * -1);
+			result = div_by_10_exp(pow_b5, n * -1, TRUE);
 		}
 	}
 	return (result);
@@ -134,38 +127,10 @@ char *five_exp(unsigned short n)
  */
 unsigned int two_pexp(unsigned int n)
 {
-  unsigned int result = 1;
-  unsigned int i;
+	unsigned int result = 1;
+	unsigned int i;
 
-  for (i = 0; i < n; i++)
-    result *= 2;
-  return (result);
-}
-
-/* TODO: implement rounding feature */
-/**
- * round_float - Rounds a floating point number
- * @num: The floating point number to round
- * @precision: The number of precision of the fractional part
- * @can_free: Specifies whether the given numbers can be freed
- *
- * Return: The rounded float, otherwise NULL
- */
-char *round_float(char *num, unsigned int precision, __attribute__((unused)) char can_free)
-{
-	int dec_pos = index_of(num, '.');
-	/* int len = str_len(num); */
-	char *one, *result = NULL;
-
-	one = malloc(sizeof(char) * 2);
-	one[0] = '1';
-	one[1] = '\0';
-	if (precision == 0)
-	{
-		if (dec_pos > 0 && (*(num + dec_pos + 1) != '\0' && num[dec_pos + 1] > '4'))
-		{
-			/* add + */
-		}
-	}
+	for (i = 0; i < n; i++)
+		result *= 2;
 	return (result);
 }
