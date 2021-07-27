@@ -102,8 +102,6 @@ int convert_fmt_s(va_list *args_list, fmt_info_t *fmt_info)
 	char *str = va_arg(*args_list, char *);
 	char null_str[] = "(null)";
 
-	if (!str)
-		return (-1);
 	str = str ? str : null_str;
 	len = fmt_info->is_precision_set && fmt_info->prec >= 0
 		? fmt_info->prec : str_len(str);

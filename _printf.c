@@ -13,18 +13,19 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, char_count = 0;
-	char processing_escape = FALSE;
+	int i = 0, char_count = 0, tmp, processing_escape = FALSE;
 	fmt_info_t fmt_info;
 	va_list args;
 
+	if (!format)
+		return (-1);
 	va_start(args, format);
 	write_to_buffer(0, -1);
 	for (i = 0; format && *(format + i) != '\0'; i++)
 	{
 		if (processing_escape)
 		{
-			i += ABS(read_format_info(format + i, args, &fmt_info));
+			tmp = read_format_info(format + i, args, &fmt_info);
 			processing_escape = FALSE;
 			if (is_specifier(fmt_info.spec))
 			{
@@ -32,11 +33,11 @@ int _printf(const char *format, ...)
 			}
 			else
 			{
-				i--;
 				_putchar('%');
 				_putchar(*(format + i));
 				char_count += 2;
 			}
+			i += (tmp > 0 ? tmp : 0);
 		}
 		else
 		{
