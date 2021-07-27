@@ -37,6 +37,7 @@ int set_number(const char *str, int *number)
  * @nxt: The next character
  * @fmt_info: The pointer to the destination fmt_info_t struct
  */
+
 void set_length(char cur, char nxt, fmt_info_t *fmt_info)
 {
 	fmt_info->is_long_double = cur == 'L' ? TRUE : FALSE;
