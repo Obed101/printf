@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "holberton.h"
 
@@ -20,17 +21,18 @@ void convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info)
  */
 void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, size = 16;
+	int i, size;
 	void *ptr = va_arg(*args_list, void *);
 	long tmp = (long)ptr;
 	char *str;
 
+	size = sizeof(ptr) * 2;
 	(void)fmt_info;
 	str = malloc(sizeof(char) * (size + 1));
 	if (str && ptr)
 	{
 		mem_set(str, size, '0');
-		for (i = 0; i < 16; i++)
+		for (i = 0; i < size; i++)
 		{
 			*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
 				: (tmp % 16) - 10 + 'a';

@@ -135,10 +135,11 @@ int write_to_buffer(char c, char action)
 	static int i;
 	static int chars_count;
 	static char buffer[1024];
-	char out = 1;
+	static char out;
 
 	if (i < 1024 && action == 0)
 	{
+		out = chars_count < 1 ? 1 : out;
 		buffer[i] = c;
 		i++;
 		chars_count++;
@@ -156,6 +157,6 @@ int write_to_buffer(char c, char action)
 		mem_set(buffer, 1024, 0);
 	}
 	if (action == -2)
-		return (chars_count);
+		return (chars_count * out);
 	return (out);
 }
