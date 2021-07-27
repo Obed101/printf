@@ -50,15 +50,24 @@ void set_length(char cur, char nxt, fmt_info_t *fmt_info)
  * set_flags - Sets the flags in a format info struct
  * @cur: The flag character
  * @fmt_info: The pointer to the destination fmt_info_t struct
+ *
+ * Return: The number of flags that were read
  */
-void set_flags(char cur, fmt_info_t *fmt_info)
+int set_flags(const char *str, fmt_info_t *fmt_info)
 {
-	fmt_info->space = cur == ' ' ? TRUE : fmt_info->space;
-	fmt_info->left = cur == '-' || fmt_info->left ? TRUE : FALSE;
-	fmt_info->show_sign = cur == '+' || fmt_info->show_sign ? TRUE : FALSE;
-	fmt_info->group = cur == '\'' || fmt_info->group ? TRUE : FALSE;
-	fmt_info->alt = cur == '#' || fmt_info->alt ? TRUE : FALSE;
-	fmt_info->pad = cur == '0' ? '0' : fmt_info->pad;
+	int i = 0;
+	while (*(str + i) != '\0' && is_flag(*(str + i)))
+	{
+		fmt_info->space = *(str + i) == ' ' ? TRUE : fmt_info->space;
+		fmt_info->left = *(str + i) == '-' || fmt_info->left ? TRUE : FALSE;
+		fmt_info->show_sign = *(str + i) == '+' || fmt_info->show_sign
+			? TRUE : FALSE;
+		fmt_info->group = *(str + i) == '\'' || fmt_info->group ? TRUE : FALSE;
+		fmt_info->alt = *(str + i) == '#' || fmt_info->alt ? TRUE : FALSE;
+		fmt_info->pad = *(str + i) == '0' ? '0' : fmt_info->pad;
+		i++;
+	}
+	return (i - 1);
 }
 
 /**
@@ -97,19 +106,9 @@ int read_format_info(const char *str, va_list args, fmt_info_t *fmt_info)
 	init_format_info(fmt_info);
 	for (; str && *(str + i) != '\0' && !fmt_info->spec && no_error == 1; i++)
 	{
-		if (is_specifier(*(str + i)) && order < 5)
+		if (is_flag(*(str + i)) && order < 1)
 		{
-			fmt_info->spec = *(str + i);
-			break;
-		}
-		else if (is_length(*(str + i)) && order < 4)
-		{
-			set_length(*(str + i), *(str + i + 1), fmt_info);
-			i += *(str + i) == *(str + i + 1) ? 1 : 0;
-		}
-		else if (is_flag(*(str + i)) && order < 1)
-		{
-			set_flags(*(str + i), fmt_info);
+			i += set_flags(str + i, fmt_info);
 		}
 		else if ((is_digit(*(str + i)) || *(str + i) == '*') && order < 2)
 		{
@@ -124,11 +123,21 @@ int read_format_info(const char *str, va_list args, fmt_info_t *fmt_info)
 			i++;
 			set_precision(str, args, fmt_info, &i, &no_error);
 		}
+		else if (is_length(*(str + i)) && order < 4)
+		{
+			set_length(*(str + i), *(str + i + 1), fmt_info);
+			i += *(str + i) == *(str + i + 1) ? 1 : 0;
+		}
+		else if (is_specifier(*(str + i)) && order < 5)
+		{
+			fmt_info->spec = *(str + i);
+			break;
+		}
 		else
 		{
 			no_error = -1;
 		}
-		order += !is_flag(*(str + i));
+		order++;
 	}
 	return (i * no_error);
 }

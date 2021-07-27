@@ -111,7 +111,7 @@ void free_float_info(float_info_t *flt_info);
 
 int set_number(const char *str, int *number);
 void set_length(char cur, char nxt, fmt_info_t *fmt_info);
-void set_flags(char cur, fmt_info_t *fmt_info);
+int set_flags(const char *str, fmt_info_t *fmt_info);
 void set_precision(const char *str, va_list args,
 	fmt_info_t *fmt_info, int *i, int *error_status);
 int read_format_info(const char *, va_list, fmt_info_t *);

@@ -12,7 +12,7 @@
  */
 int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len, zero_pads_count = 0;
+	int i, chars_count = 0, len = 0, zero_pads_count = 0;
 	long num;
 	char *str;
 
@@ -25,9 +25,6 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 	else
 		num = va_arg(*args_list, int);
 	str = long_to_str(num);
-	len = num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space))
-						? 1
-						: 0;
 	if (str)
 	{
 		len += str_len(str);
@@ -39,8 +36,11 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 		if (num < 0 || (num >= 0 && (fmt_info->show_sign || fmt_info->space)))
+		{
 			_putchar(num < 0 ? '-'
 				: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
+			chars_count += (num < 0 ? 0 : 1);
+		}
 		for (i = 0; i < zero_pads_count; i++)
 			_putchar('0');
 		for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
