@@ -93,6 +93,11 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 				_putchar(fmt_info->pad);
 		}
 	}
+	else
+	{
+		_putstr("(null)");
+		chars_count += 6;
+	}
 	return (chars_count);
 }
 
