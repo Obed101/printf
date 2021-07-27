@@ -40,6 +40,11 @@ int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
 				chars_count++;
 			}
 		}
+		if (num == 0)
+		{
+			_putchar('0');
+			chars_count++;
+		}
 		if (fmt_info->left)
 		{
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
@@ -71,7 +76,7 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 				_putchar(fmt_info->pad);
 		}
 		chars_count += MAX(len, fmt_info->width) - len;
-		for (i = 0; str && *(str + i) != '\0'; i++)
+		for (i = 0; *(str + i) != '\0'; i++)
 		{
 			if (*(str + i) < 32 || *(str + i) >= 127)
 			{
