@@ -153,10 +153,13 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 	unsigned long num;
 	char *str;
 
-	if (fmt_info->is_short)
+	if (fmt_info->is_long)
+		num = va_arg(*args_list, unsigned long);
+	else if (fmt_info->is_short)
 		num = va_arg(*args_list, unsigned int) >> 2 * 8;
 	else
-		num = va_arg(*args_list, unsigned long);
+		num = va_arg(*args_list, unsigned int);
+
 	str = u_long_to_str(num);
 	if (str)
 	{
