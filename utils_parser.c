@@ -43,7 +43,7 @@ void set_length(char cur, char nxt, fmt_info_t *fmt_info)
 	fmt_info->is_long_long = cur == 'l' && nxt == 'l' ? TRUE : FALSE;
 	fmt_info->is_long = cur == 'l' && nxt != 'l' ? TRUE : FALSE;
 	fmt_info->is_short = cur == 'h' && nxt != 'h' ? TRUE : FALSE;
-	fmt_info->is_char = cur == 'h' && nxt == 'h' ? TRUE : FALSE;
+
 }
 
 /**
