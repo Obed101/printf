@@ -77,8 +77,8 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 			{
 				_putchar('\\');
 				_putchar('x');
-				_putchar(hex_digit(*(str + i) / 16));
-				_putchar(hex_digit(*(str + i) % 16));
+				_putchar(TO_UPPER(hex_digit(*(str + i) / 16)));
+				_putchar(TO_UPPER(hex_digit(*(str + i) % 16)));
 				chars_count += 4;
 			}
 			else
