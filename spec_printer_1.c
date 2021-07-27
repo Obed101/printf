@@ -107,37 +107,39 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
  */
 void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i = 0, zeros_count = 0, len = 0;
-	unsigned long num;
-	char *str, is_empty = fmt_info->prec == 0 && fmt_info->is_precision_set;
+	int i = 0, zeros_count = 0, num_len = 0, len = 0;
+	unsigned long num, max_w, max_p;
+	char *str;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
 	else
 		num = va_arg(*args_list, unsigned int) >> (fmt_info->is_short ? 2 : 0) * 8;
-	is_empty = num == 0 && is_empty;
 	str = long_to_oct(num);
 	if (str)
 	{
-		len = str_len(str);
-		if (fmt_info->is_precision_set && num > 0)
-			zeros_count = fmt_info->prec - len > 0 ? fmt_info->prec - len : 0;
-		i = (fmt_info->alt && zeros_count == 0) ? 1 : 0;
-		if (fmt_info->width > len)
-			len = is_empty ? fmt_info->width : fmt_info->width - str_len(str);
-		len -= (i + zeros_count);
-		for (i = 0; !fmt_info->left && i < len; i++)
-			_putchar(' ');
-		if ((fmt_info->alt && zeros_count == 0))
-			_putchar('0');
-		for (i = 0; i < zeros_count; i++)
-			_putchar('0');
-		for (i = 0; i < str_len(str) && num > 0; i++)
+		if (fmt_info->is_precision_set && !fmt_info->prec && !num)
 		{
-			_putchar(*(str + i));
+			print_repeat(' ', fmt_info->width);
 		}
-		for (i = 0; fmt_info->left && i < len; i++)
-			_putchar(' ');
+		else
+		{
+			num_len = str_len(str);
+			max_w = MAX(fmt_info->width, num_len);
+			max_p = MAX(fmt_info->prec, num_len);
+			zeros_count = max_p - num_len;
+			len = max_w - (zeros_count + num_len);
+			for (i = 0; !fmt_info->left && i < len; i++)
+				_putchar(' ');
+			if (fmt_info->alt && zeros_count == 0)
+				_putchar('0');
+			for (i = 0; i < zeros_count; i++)
+				_putchar('0');
+			for (i = 0; *(str + i) != '\0'; i++)
+				_putchar(*(str + i));
+			for (i = 0; fmt_info->left && i < len; i++)
+				_putchar(' ');
+		}
 		free(str);
 	}
 }
