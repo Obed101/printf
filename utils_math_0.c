@@ -115,7 +115,7 @@ int bin_to_int(char *bin_str)
  */
 char *long_to_oct(unsigned long num)
 {
-	int i = 0, size = 21;
+	int i = 0, size = num == 0 ? 2 : 21;
 	unsigned long num_c = num;
 	char *str;
 
@@ -123,8 +123,11 @@ char *long_to_oct(unsigned long num)
 	if (str)
 	{
 		mem_set(str, size, 0);
-		if (num_c == 0)
+		if (num == 0)
+		{
 			*(str + i) = '0';
+			return (str);
+		}
 		for (i = 0; i <= size; i++)
 		{
 			*(str + i) = (num_c % 8) + '0';
