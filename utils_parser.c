@@ -74,6 +74,7 @@ int set_flags(const char *str, fmt_info_t *fmt_info)
 /**
  * set_precision - Reads a format info data into the given struct
  * @str: The string contained the format tokens
+ *
  * @args: The arguments list
  * @fmt_info: The pointer to the destination fmt_info_t struct
  * @i: The pointer to the position in the format string
@@ -105,6 +106,7 @@ void set_precision(const char *str, va_list args,
 /**
  * read_format_info - Reads a format info data into the given struct
  * @str: The string contained the format tokens
+ *
  * @args: The arguments list
  * @fmt_info: The pointer to the destination fmt_info_t struct
  *
