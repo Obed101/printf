@@ -75,7 +75,7 @@ typedef struct format_info fmt_info_t;
 struct spec_printer
 {
 	char spec;
-	int (*print_arg)(va_list *args, fmt_info_t *fmt_info);
+	void (*print_arg)(va_list *args, fmt_info_t *fmt_info);
 };
 typedef struct spec_printer spec_printer_t;
 typedef unsigned char uchar_t;
@@ -100,7 +100,7 @@ int _putchar(char c);
 int _putstr(char *str);
 int write_to_buffer(char c, char action);
 int _printf(const char *format, ...);
-int write_format(va_list *args_list, fmt_info_t *fmt_info);
+void write_format(va_list *args_list, fmt_info_t *fmt_info);
 
 
 void init_format_info(fmt_info_t *spec);
@@ -117,21 +117,21 @@ void set_precision(const char *str, va_list args,
 int read_format_info(const char *, va_list, fmt_info_t *);
 
 
-int convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_c(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_s(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_c(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_s(va_list *args_list, fmt_info_t *fmt_info);
 
-int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info);
-/* int convert_fmt_fF(va_list *args_list, fmt_info_t *fmt_info); */
-int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info);
+/* void convert_fmt_fF(va_list *args_list, fmt_info_t *fmt_info); */
+void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info);
 
-int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info);
-int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info);
+void convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info);
 
 
 int str_len(char *str);

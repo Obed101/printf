@@ -6,12 +6,10 @@
  * convert_fmt_b - Prints the binary format of an unsigned int argument
  * @args_list: The arguments list
  * @fmt_info: The format info
- *
- * Return: The number of characters written
  */
-int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, size = 32, len = 0;
+	int i, size = 32, len = 0;
 	unsigned int num = va_arg(*args_list, unsigned int), tmp;
 	char *str;
 
@@ -30,27 +28,19 @@ int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 				_putchar(fmt_info->pad);
 		}
-		chars_count += MAX(len, fmt_info->width) - len;
 		for (i = size - 1; i >= 0; i--)
 		{
 			if (*(str + i) != '\0')
-			{
 				_putchar(*(str + i));
-				chars_count++;
-			}
 		}
 		if (num == 0)
-		{
 			_putchar('0');
-			chars_count++;
-		}
 		if (fmt_info->left)
 		{
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 				_putchar(' ');
 		}
 	}
-	return (chars_count);
 }
 
 /**
@@ -61,9 +51,9 @@ int convert_fmt_b(va_list *args_list, fmt_info_t *fmt_info)
  *
  * Return: The number of characters written
  */
-int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len;
+	int i, len;
 	char *str = va_arg(*args_list, char *);
 
 	if (str)
@@ -74,7 +64,6 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 				_putchar(fmt_info->pad);
 		}
-		chars_count += MAX(len, fmt_info->width) - len;
 		for (i = 0; *(str + i) != '\0'; i++)
 		{
 			if (*(str + i) < 32 || *(str + i) >= 127)
@@ -83,12 +72,10 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 				_putchar('x');
 				_putchar(TO_UPPER(hex_digit(*(str + i) / 16)));
 				_putchar(TO_UPPER(hex_digit(*(str + i) % 16)));
-				chars_count += 4;
 			}
 			else
 			{
 				_putchar(*(str + i));
-				chars_count++;
 			}
 		}
 		if (fmt_info->left)
@@ -100,9 +87,7 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
 	else
 	{
 		_putstr("(null)");
-		chars_count += 6;
 	}
-	return (chars_count);
 }
 
 /**
@@ -112,9 +97,9 @@ int convert_fmt_S(va_list *args_list, fmt_info_t *fmt_info)
  *
  * Return: The number of characters written
  */
-int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len, is_low_1, is_low_2, is_upper, is_lower;
+	int i, len, is_low_1, is_low_2, is_upper, is_lower;
 	char *str = va_arg(*args_list, char *);
 
 	if (str)
@@ -125,7 +110,6 @@ int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 				_putchar(fmt_info->pad);
 		}
-		chars_count += MAX(len, fmt_info->width) - len;
 		for (i = 0; str && *(str + i) != '\0'; i++)
 		{
 			is_low_1 = *(str + i) >= 'a' && *(str + i) <= 'm';
@@ -138,7 +122,6 @@ int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
 					+ ((1 - is_low_1 - is_low_2) * (*(str + i) - 13)));
 			else
 				_putchar(*(str + i));
-			chars_count++;
 		}
 		if (fmt_info->left)
 		{
@@ -146,7 +129,6 @@ int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
 				_putchar(fmt_info->pad);
 		}
 	}
-	return (chars_count);
 }
 
 /**
@@ -156,9 +138,9 @@ int convert_fmt_R(va_list *args_list, fmt_info_t *fmt_info)
  *
  * Return: The number of characters written
  */
-int convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len;
+	int i, len;
 	char *str = va_arg(*args_list, char *);
 
 	if (str)
@@ -169,11 +151,9 @@ int convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info)
 			for (i = 0; i < MAX(len, fmt_info->width) - len; i++)
 				_putchar(fmt_info->pad);
 		}
-		chars_count += MAX(len, fmt_info->width) - len;
 		for (i = len - 1; i >= 0; i--)
 		{
 			_putchar(*(str + i));
-			chars_count++;
 		}
 		if (fmt_info->left)
 		{
@@ -181,5 +161,4 @@ int convert_fmt_r(va_list *args_list, fmt_info_t *fmt_info)
 				_putchar(fmt_info->pad);
 		}
 	}
-	return (chars_count);
 }
