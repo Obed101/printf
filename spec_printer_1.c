@@ -10,9 +10,9 @@
  *
  * Return: The number of characters written
  */
-int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len = 0, zero_pads_count = 0;
+	int i, len = 0, zero_pads_count = 0;
 	long num;
 	char *str;
 
@@ -39,19 +39,15 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			_putchar(num < 0 ? '-'
 				: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
-			chars_count += (num < 0 ? 0 : 1);
 		}
 		for (i = 0; i < zero_pads_count; i++)
 			_putchar('0');
 		for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
 			_putchar(*(str + i));
-		chars_count += MAX(len, fmt_info->width) - len;
-		chars_count += len;
 		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 		free(str);
 	}
-	return (chars_count);
 }
 
 /**
@@ -61,9 +57,9 @@ int convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
  *
  * Return: The number of characters written
  */
-int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, size = 8, len = fmt_info->alt ? 2 : 0;
+	int i, size = 8, len = fmt_info->alt ? 2 : 0;
 	unsigned int num = va_arg(*args_list, unsigned int), tmp;
 	int zero_pads_count = num == 0 ? 1 : 0;
 	char *str;
@@ -87,7 +83,6 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		len += zero_pads_count;
 		for (i = 0; !fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
-		chars_count += MAX(len, fmt_info->width) - len + zero_pads_count;
 		if (fmt_info->alt)
 			_putstr(fmt_info->spec == 'X' ? "0X" : "0x");
 		for (i = 0; i < zero_pads_count; i++)
@@ -96,13 +91,11 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			if (*(str + i) != '\0')
 				_putchar(*(str + i));
-			chars_count += (*(str + i) != '\0' ? 1 : 0);
 		}
 		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 		free(str);
 	}
-	return (chars_count);
 }
 
 /**
@@ -112,9 +105,9 @@ int convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
  *
  * Return: The number of characters written
  */
-int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i = 0, chars_count = 0, zero_pads_count = 0, len = 0;
+	int i = 0, zero_pads_count = 0, len = 0;
 	unsigned long num;
 	char *str, is_empty = fmt_info->prec == 0 && fmt_info->is_precision_set;
 
@@ -133,7 +126,6 @@ int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 		if (fmt_info->width > len)
 			len = is_empty ? fmt_info->width : fmt_info->width - str_len(str);
 		len -= (i + zero_pads_count);
-		chars_count += i + len + zero_pads_count;
 		for (i = 0; !fmt_info->left && i < len; i++)
 			_putchar(' ');
 		if ((fmt_info->alt && zero_pads_count == 0))
@@ -143,25 +135,21 @@ int convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 		for (i = 0; i < str_len(str) && num > 0; i++)
 		{
 			_putchar(*(str + i));
-			chars_count++;
 		}
 		for (i = 0; fmt_info->left && i < len; i++)
 			_putchar(' ');
 		free(str);
 	}
-	return (chars_count);
 }
 
 /**
  * convert_fmt_u - Prints an unsigned integer
  * @args_list: The arguments list
  * @fmt_info: The format info
- *
- * Return: The number of characters written
  */
-int convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
+void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, chars_count = 0, len, zero_pads_count = 0;
+	int i, len, zero_pads_count = 0;
 	unsigned long num;
 	char *str;
 
@@ -182,11 +170,8 @@ int convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 			_putchar('0');
 		for (i = 0; *(str + i) != '\0'; i++)
 			_putchar(*(str + i));
-		chars_count += MAX(len, fmt_info->width) - len;
-		chars_count += len;
 		for (i = 0; fmt_info->left && i < MAX(len, fmt_info->width) - len; i++)
 			_putchar(' ');
 		free(str);
 	}
-	return (chars_count);
 }

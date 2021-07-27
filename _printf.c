@@ -13,7 +13,7 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, char_count = 0, tmp, processing_escape = FALSE;
+	int i = 0, tmp, processing_escape = FALSE;
 	fmt_info_t fmt_info;
 	va_list args;
 
@@ -29,13 +29,12 @@ int _printf(const char *format, ...)
 			processing_escape = FALSE;
 			if (is_specifier(fmt_info.spec))
 			{
-				char_count += write_format(&args, &fmt_info);
+				write_format(&args, &fmt_info);
 			}
 			else
 			{
 				_putchar('%');
 				_putchar(*(format + i));
-				char_count += 2;
 			}
 			i += (tmp > 0 ? tmp : 0);
 		}
@@ -44,24 +43,21 @@ int _printf(const char *format, ...)
 			if (*(format + i) == '%')
 				processing_escape = TRUE;
 			else
-				_putchar(*(format + i)), char_count++;
+				_putchar(*(format + i));
 		}
 	}
 	write_to_buffer(0, 1);
 	va_end(args);
-	return (char_count);
+	return (write_to_buffer('\0', -2));
 }
 
 /**
  * write_format - Writes data formatted against some parameters
  * @args_list: The arguments list
  * @fmt_info: The format info parameters that were read
- *
- * Return: The number of characters written
  */
-int write_format(va_list *args_list, fmt_info_t *fmt_info)
+void write_format(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int chars_written = 0;
 	int i;
 	spec_printer_t spec_printers[] = {
 		{'%', convert_fmt_percent},
@@ -88,11 +84,10 @@ int write_format(va_list *args_list, fmt_info_t *fmt_info)
 	{
 		if (fmt_info->spec == spec_printers[i].spec)
 		{
-			chars_written = spec_printers[i].print_arg(args_list, fmt_info);
+			spec_printers[i].print_arg(args_list, fmt_info);
 			break;
 		}
 	}
-	return (chars_written);
 }
 
 /**
@@ -129,7 +124,8 @@ int _putchar(char c)
  * @action: The action to perform (
  * -1-> reset the static variables
  * 0-> write char to buffer
- * 1-> don't write character to buffer but empty buffer onto stdout)
+ * 1-> don't write character to buffer but empty buffer onto stdout
+ * -2-> the number of characters written to stdout)
  *
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
@@ -137,6 +133,7 @@ int _putchar(char c)
 int write_to_buffer(char c, char action)
 {
 	static int i;
+	static int chars_count;
 	static char buffer[1024];
 	char out = 1;
 
@@ -144,6 +141,7 @@ int write_to_buffer(char c, char action)
 	{
 		buffer[i] = c;
 		i++;
+		chars_count++;
 	}
 	if (i >= 1024 || action == 1)
 	{
@@ -154,7 +152,10 @@ int write_to_buffer(char c, char action)
 	if (action == -1)
 	{
 		i = 0;
+		chars_count = 0;
 		mem_set(buffer, 1024, 0);
 	}
+	if (action == -2)
+		return (chars_count);
 	return (out);
 }
