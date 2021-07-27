@@ -1,0 +1,10 @@
+.vscode/
+test/
+tests/
+*test.c
+test*.c
+*~
+*.exe
+*.out
+*.log
+prog.py

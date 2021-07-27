@@ -1,0 +1,29 @@
+." Process this file with
+." groff -man -Tascii man_3_printf
+."
+.TH man 3 "26 July 2021" "1.0" "_printf man page"
+
+.SH NAME
+.B _printf
+\- function to print formatted output of arguments
+
+.SH SYNOPSIS
+.B _printf
+.RI {FORMAT}
+.RI [ARGUMENTS]...
+
+.SH DESCRIPTION
+Print
+.B ARGUMENT
+(s) according to
+.B
+FORMAT
+
+.SH Reporting Bugs
+Report _printf bugs to https://github.com/Obed101/2-printf-2/issues
+
+.SH Copyright
+Copyright 2021
+Free Software Foundation, Inc. License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+
