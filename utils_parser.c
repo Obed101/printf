@@ -33,6 +33,7 @@ int set_number(const char *str, int *number)
 
 /**
  * set_length - Sets the length in a format info struct
+ *
  * @cur: The current character
  * @nxt: The next character
  * @fmt_info: The pointer to the destination fmt_info_t struct
