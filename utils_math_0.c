@@ -106,3 +106,32 @@ int bin_to_int(char *bin_str)
 	}
 	return (result);
 }
+
+/**
+ * long_to_oct - Converts a long integer to its octal representation
+ * @num: The number to convert
+ *
+ * Return: The octal representation of the number, otherwise NULL
+ */
+char *long_to_oct(unsigned long num)
+{
+	int i = 0, size = 21;
+	unsigned long num_c = num;
+	char *str;
+
+	str = malloc(sizeof(char) * (size));
+	if (str)
+	{
+		mem_set(str, size, 0);
+		if (num_c == 0)
+			*(str + i) = '0';
+		for (i = 0; i <= size; i++)
+		{
+			*(str + i) = (num_c % 8) + '0';
+			num_c /= 8;
+		}
+		rev_string(str);
+		str = trim_start(str, '0', TRUE);
+	}
+	return (str);
+}
