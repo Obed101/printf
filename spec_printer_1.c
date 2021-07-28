@@ -132,11 +132,12 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 			num_len = str_len(str);
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = max_p - num_len;
+			(void)max_p;
+			zeros_count = ABS(fmt_info->prec - num_len) ;
 			len = max_w - (zeros_count + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
-			if (fmt_info->alt && zeros_count == 0)
+			if (fmt_info->alt && zeros_count == 0 && num)
 				_putchar('0');
 			for (i = 0; i < zeros_count; i++)
 				_putchar('0');
