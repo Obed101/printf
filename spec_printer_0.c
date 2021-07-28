@@ -23,7 +23,7 @@ void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, size;
 	void *ptr = va_arg(*args_list, void *);
-	long tmp = (long)ptr;
+	uintptr_t tmp = (uintptr_t)ptr;
 	char *str;
 
 	size = sizeof(ptr) * 2;
