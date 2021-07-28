@@ -159,7 +159,6 @@ int write_to_buffer(char c, char action)
 	}
 	if (action == -2)
 	{
-		chars_count++;
 		return (chars_count);
 	}
 	return (out);
