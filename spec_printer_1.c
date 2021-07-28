@@ -133,7 +133,7 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
 			(void)max_p;
-			zeros_count = ABS(fmt_info->prec - num_len) ;
+			zeros_count = ABS(fmt_info->prec - num_len);
 			len = max_w - (zeros_count + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
