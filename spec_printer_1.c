@@ -34,8 +34,8 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			num_len = str_len(str) + inv_plus;
 			max_w = MAX(fmt_info->width, num_len);
-			max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = max_p - num_len;
+			max_p = MAX(fmt_info->prec, num_len + (num < 0 ? -1 : 0));
+			zeros_count = max_p - num_len + (num < 0 ? 1 : 0);
 			len = max_w - (zeros_count + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
