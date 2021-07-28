@@ -1,8 +1,5 @@
 .vscode/
-test/
-tests/
-*test.c
-test*.c
+*test*
 *~
 *.exe
 *.out
