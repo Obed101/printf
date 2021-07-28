@@ -22,6 +22,9 @@
 #ifndef ABS
 #define ABS(a) ((a) > (0) ? (a) : (0 - (a)))
 #endif
+#ifndef NO_NEG
+#define NO_NEG(a) ((a) < (0) ? (0) : ((a)))
+#endif
 #ifndef TO_UPPER
 #define TO_UPPER(c) ((c) >= 'a' && (c) <= 'z' ? (c) - 6 - 26 : (c))
 #endif

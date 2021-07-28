@@ -32,11 +32,12 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		}
 		else
 		{
-			num_len = str_len(str) + inv_plus;
-			max_w = MAX(fmt_info->width, num_len);
+			num_len = str_len(str) + inv_plus, max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len + (num < 0 ? -1 : 0));
-			zeros_count = max_p - num_len + (num < 0 ? 1 : 0);
-			len = max_w - (zeros_count + num_len);
+			zeros_count =  max_p - num_len + (num < 0 ? 1 : 0);
+			zeros_count += (fmt_info->is_width_set ? fmt_info->width - num_len : 0);
+			zeros_count -= (num == 0 && zeros_count > 0 ? 1 : 0);
+			len = max_w - ((zeros_count < 0 ? 0 : zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
 			if (num < 0 || inv_plus)
@@ -81,11 +82,12 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		}
 		else
 		{
-			num_len = str_len(str) + (fmt_info->alt ? 2 : 0);
-			max_w = MAX(fmt_info->width, num_len);
-			max_p = MAX(fmt_info->prec, num_len);
+			num_len = str_len(str) + fmt_info->alt * 2;
+			max_w = MAX(fmt_info->width, num_len), max_p = MAX(fmt_info->prec, num_len);
 			zeros_count = max_p - num_len;
-			len = max_w - (zeros_count + num_len);
+			zeros_count += (fmt_info->is_width_set ? fmt_info->width - num_len : 0);
+			zeros_count -= (num == 0 && zeros_count > 0 ? 1 : 0);
+			len = max_w - ((zeros_count < 0 ? 0 : zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
 			if (fmt_info->alt)
@@ -132,7 +134,6 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 			num_len = str_len(str);
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
-			/* (void)max_p; */
 			zeros_count = max_p - num_len;
 			len = max_w - (zeros_count + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
@@ -180,7 +181,8 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
 			zeros_count = max_p - num_len;
-			len = max_w - (zeros_count + num_len);
+			zeros_count -= (num == 0 && zeros_count > 0 ? 1 : 0);
+			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
 			for (i = 0; i < zeros_count; i++)
