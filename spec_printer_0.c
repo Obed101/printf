@@ -43,7 +43,7 @@ void convert_fmt_p(va_list *args_list, fmt_info_t *fmt_info)
 		rev_string(str);
 		str = trim_start(str, '0', TRUE);
 		_putstr("0x");
-		for (i = 0; i < size; i++)
+		for (i = 0; *(str + i) != '\0'; i++)
 			_putchar(*(str + i));
 		free(str);
 	}
