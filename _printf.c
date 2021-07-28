@@ -143,7 +143,7 @@ int write_to_buffer(char c, char action)
 		out = chars_count < 1 ? 1 : out;
 		buffer[i] = c;
 		i++;
-		chars_count += c < 32 || c >= 127 ? 0 : 1;
+		chars_count++;
 	}
 	if (i >= 1024 || action == 1)
 	{
