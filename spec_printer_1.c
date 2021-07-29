@@ -19,7 +19,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, long);
 	else if (fmt_info->is_short)
-		num = (va_arg(*args_list, long) << 2 * 8) >> 2 * 8;
+		num = (short)va_arg(*args_list, long);
 	else
 		num = va_arg(*args_list, int);
 	str = long_to_str(num);
