@@ -19,7 +19,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, long);
 	else if (fmt_info->is_short)
-		num = (short)va_arg(*args_list, int);
+		num = (va_arg(*args_list, long) << 2 * 8) >> 2 * 8;
 	else
 		num = va_arg(*args_list, int);
 	str = long_to_str(num);
@@ -66,7 +66,7 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 	char *str;
 
 	if (fmt_info->is_short)
-		num = (short)va_arg(*args_list, unsigned int);
+		num = (va_arg(*args_list, unsigned long) << 2 * 8) >> 2 * 8;
 	else if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
 	else
@@ -116,8 +116,10 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
+	else if (fmt_info->is_short)
+		num = (va_arg(*args_list, unsigned long) << 2 * 8) >> 2 * 8;
 	else
-		num = va_arg(*args_list, unsigned int) >> (fmt_info->is_short ? 2 : 0) * 8;
+		num = va_arg(*args_list, unsigned int);
 	str = long_to_oct(num);
 	if (str)
 	{
@@ -161,7 +163,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, unsigned long);
 	else if (fmt_info->is_short)
-		num = (short)va_arg(*args_list, unsigned int);
+		num = (va_arg(*args_list, unsigned int) << 2 * 8) >> 2 * 8;
 	else
 		num = va_arg(*args_list, unsigned int);
 	str = u_long_to_str(num);

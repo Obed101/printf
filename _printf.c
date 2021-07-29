@@ -31,9 +31,11 @@ int _printf(const char *format, ...)
 				write_format(&args, &fmt_info);
 			else if (*(format + ABS(tmp) + 1) == '\0')
 				error = 1;
+			else if (*(format + ABS(tmp) + 1) == '\n')
+				_putnchars(2, '%', '\n');
 			else
 				_putnchars(2, '%', *(format + i));
-			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : 0));
+			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : ABS(tmp) - 1));
 		}
 		else
 		{
