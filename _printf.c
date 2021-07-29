@@ -13,7 +13,7 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, tmp, processing_escape = FALSE;
+	int i = 0, tmp, processing_escape = FALSE, error = 0;
 	fmt_info_t fmt_info;
 	va_list args;
 
@@ -28,15 +28,12 @@ int _printf(const char *format, ...)
 			tmp = read_format_info(format + i, args, &fmt_info);
 			processing_escape = FALSE;
 			if (is_specifier(fmt_info.spec))
-			{
 				write_format(&args, &fmt_info);
-			}
+			else if (*(format + ABS(tmp) + 1) == '\0')
+				error = 1;
 			else
-			{
-				_putchar('%');
-				_putchar(*(format + i));
-			}
-			i += (tmp > 0 ? tmp : 0);
+				_putnchars(2, '%', *(format + i));
+			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : 0));
 		}
 		else
 		{
@@ -48,7 +45,7 @@ int _printf(const char *format, ...)
 	}
 	write_to_buffer(0, 1);
 	va_end(args);
-	return (write_to_buffer('\0', -2));
+	return (error ? -1 : write_to_buffer('\0', -2));
 }
 
 /**
