@@ -27,6 +27,7 @@ char *u_long_to_str(unsigned long num)
 			j--;
 		}
 		str = trim_start(str, '0', TRUE);
+		str = num == 0 ? str_cat("0", "", FALSE) : str;
 	}
 	return (str);
 }
@@ -62,6 +63,7 @@ char *long_to_str(long num)
 		if (sign < 0)
 			*(str + j) = '-';
 		str = trim_start(str, '0', TRUE);
+		str = num == 0 ? str_cat("0", "", FALSE) : str;
 	}
 	return (str);
 }
