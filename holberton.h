@@ -25,11 +25,17 @@
 #ifndef NO_NEG
 #define NO_NEG(a) ((a) < (0) ? (0) : ((a)))
 #endif
+#ifndef NO_LESS
+#define NO_LESS(a, b) ((a) < (b) ? (b) : ((a)))
+#endif
 #ifndef TO_UPPER
 #define TO_UPPER(c) ((c) >= 'a' && (c) <= 'z' ? (c) - 6 - 26 : (c))
 #endif
 #ifndef TO_LOWER
 #define TO_LOWER(c) ((c) >= 'A' && (c) <= 'Z' ? (c) + 6 + 26 : (c))
+#endif
+#ifndef FMT_PREC_EMPTY
+#define FMT_PREC_EMPTY(fmt_inf) (fmt_inf->is_precision_set && !fmt_inf->prec)
 #endif
 
 /**

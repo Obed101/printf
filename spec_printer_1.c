@@ -34,7 +34,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			num_len = str_len(str) + inv_plus, max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len + (num < 0 ? -1 : 0));
-			zeros_count =  MAX(max_p, max_w) - num_len;
+			zeros_count = (max_p - num_len) * !fmt_info->left + !num;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
@@ -82,7 +82,7 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			num_len = str_len(str) + fmt_info->alt * 2;
 			max_w = MAX(fmt_info->width, num_len), max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = MAX(max_p, max_w) - num_len;
+			zeros_count = (max_p - num_len) * !fmt_info->left + (num == 0 ? 1 : 0);
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
@@ -127,10 +127,10 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 		}
 		else
 		{
-			num_len = str_len(str);
+			num_len = NO_LESS(str_len(str), 1);
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = MAX(max_p, max_w) - num_len;
+			zeros_count = (max_p - num_len) * !fmt_info->left;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
@@ -167,7 +167,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 	str = u_long_to_str(num);
 	if (str)
 	{
-		if (fmt_info->is_precision_set && !fmt_info->prec && !num)
+		if (FMT_PREC_EMPTY(fmt_info) && !num)
 		{
 			print_repeat(' ', fmt_info->width);
 		}
@@ -176,7 +176,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 			num_len = str_len(str);
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = MAX(max_p, max_w) - num_len;
+			zeros_count = (max_p - num_len) * !fmt_info->left + (num == 0 ? 1 : 0);
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
