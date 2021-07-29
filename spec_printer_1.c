@@ -176,7 +176,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 			num_len = str_len(str);
 			max_w = MAX(fmt_info->width, num_len);
 			max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = (max_p - num_len) * !fmt_info->left + (num == 0 ? 1 : 0);
+			zeros_count = (max_p - num_len) * !fmt_info->left;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(' ');
