@@ -43,8 +43,6 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 			if (num < 0 || inv_plus)
 				_putchar(num < 0 ? '-'
 					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
-			for (i = 0; !fmt_info->left && i < len && fmt_info->pad == '0'; i++)
-				_putchar(fmt_info->pad);
 			put_num(zeros_count, num, str);
 			for (i = 0; fmt_info->left && i < len; i++)
 				_putchar(' ');
