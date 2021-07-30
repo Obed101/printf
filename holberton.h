@@ -37,11 +37,12 @@
 #ifndef FMT_PREC_EMPTY
 #define FMT_PREC_EMPTY(fmt_inf) (fmt_inf->is_precision_set && !fmt_inf->prec)
 #endif
-#define PUT_NUM()\
-for (i = 0; i < zeros_count; i++)\
-				_putchar('0');\
+#define PUT_NUM() {\
+	for (i = 0; i < zeros_count; i++)\
+		_putchar('0'); \
 			for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)\
-				_putchar(*(str + i));\
+				_putchar(*(str + i)); \
+				} \
 
 /**
  * struct format_info - Contains information about the options
