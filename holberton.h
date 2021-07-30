@@ -118,7 +118,7 @@ void write_format(va_list *args_list, fmt_info_t *fmt_info);
 void print_repeat(char c, int n);
 void _putnchars(int n, ...);
 char is_letter(char c);
-int print_unknown_spec(const char *format, int pos, int length);
+void set_format_error(const char *, int *, int len, int, int *);
 
 
 void init_format_info(fmt_info_t *spec);
@@ -128,11 +128,11 @@ void free_float_info(float_info_t *flt_info);
 
 
 int set_number(const char *str, int *number);
-void set_length(char cur, char nxt, fmt_info_t *fmt_info);
+void set_length(char cur, int *pos, fmt_info_t *fmt_info);
 int set_flags(const char *str, fmt_info_t *fmt_info);
 void set_precision(const char *str, va_list args,
 	fmt_info_t *fmt_info, int *i, int *error_status);
-int read_format_info(const char *, va_list, fmt_info_t *);
+int read_format_info(const char *, va_list, fmt_info_t *, int *);
 
 
 void convert_fmt_percent(va_list *args_list, fmt_info_t *fmt_info);

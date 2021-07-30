@@ -13,7 +13,7 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, tmp, processing_escape = FALSE, error = 0;
+	int i = 0, tmp, processing_escape = FALSE, error = 1, last_token;
 	fmt_info_t fmt_info;
 	va_list args;
 
@@ -25,15 +25,12 @@ int _printf(const char *format, ...)
 	{
 		if (processing_escape)
 		{
-			tmp = read_format_info(format + i, args, &fmt_info);
+			tmp = read_format_info(format + i, args, &fmt_info, &last_token);
 			processing_escape = FALSE;
+			set_format_error(format, &i, tmp, last_token, &error);
 			if (is_specifier(fmt_info.spec))
 				write_format(&args, &fmt_info);
-			else if (is_length(format[ABS(tmp)]) && format[ABS(tmp) + 1] == '\0')
-				error = 1;
-			else
-				i += print_unknown_spec(format, i, ABS(tmp));
-			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : 0));
+			i += (is_specifier(fmt_info.spec) ? tmp - 1 : 0);
 		}
 		else
 		{
@@ -45,7 +42,7 @@ int _printf(const char *format, ...)
 	}
 	write_to_buffer(0, 1);
 	va_end(args);
-	return (error ? -1 : write_to_buffer('\0', -2));
+	return (error <= 0 ? error : write_to_buffer('\0', -2));
 }
 
 /**

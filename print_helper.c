@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdio.h>
 #include "holberton.h"
 
 /**
@@ -45,22 +46,49 @@ char is_letter(char c)
 }
 
 /**
- * print_unknown_spec - Prints an unknown spec
+ * set_format_error - Sets the error after reading a format specifier
  * @format: The format string
- * @pos: The position to start from
- * @length: The length of the unknown spec
- *
- * Return: number of positions to advance by
+ * @pos: The current position in the format string
+ * @len: The length of the format specifier minus 1
+ * @last_token: The last token from the format specifier
+ * @error: The format error flag
  */
-int print_unknown_spec(const char *format, int pos, int length)
+void set_format_error(const char *format, int *pos, int len,
+	int last_token, int *error)
 {
-	int i = 0;
+	char next_char = format[*pos + len + 1];
+	int i;
 
-	_putchar('%');
-	for (; i < length; i++)
+	if (last_token == 1 && next_char == '\0')
 	{
-		if (!is_length(format[pos + i]))
-			_putchar(format[pos + i]);
+		*error = -1;
 	}
-	return (i - 1);
+	else if (last_token == 2 && next_char == '\0')
+	{
+		*error = -1;
+		(*pos) += len - 1;
+	}
+	else if (last_token == 3 && next_char == '\0')
+	{
+		*error = -1;
+		(*pos) += len - 1;
+	}
+	else if (last_token == 4 && next_char == '\0')
+	{
+		*error = -1;
+	}
+	else
+	{
+		*error = 1;
+	}
+	if (next_char != '\0' && last_token != 5)
+	{
+		_putchar('%');
+		for (i = 0; i <= len; i++)
+		{
+			if (!is_length(format[*pos + i]))
+				_putchar(format[*pos + i]);
+		}
+	}
+	(*pos) += len;
 }
