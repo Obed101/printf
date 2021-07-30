@@ -36,10 +36,13 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 			if (fmt_info->is_precision_set)
 				zeros_count = MAX(fmt_info->prec + (inv_plus || num < 0 ? 1 : 0),
 					num_len) - num_len;
+			else
+				zeros_count = fmt_info->pad == '0' ? MAX(fmt_info->width,
+					num_len) - num_len : 0;
 			if (fmt_info->is_width_set)
 				len = (MAX(fmt_info->width, num_len) - num_len) - zeros_count;
 			for (i = 0; !fmt_info->left && i < len; i++)
-				_putchar(fmt_info->pad);
+				_putchar(' ');
 			if (num < 0 || inv_plus)
 				_putchar(num < 0 ? '-'
 					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
