@@ -171,9 +171,6 @@ char *five_exp(unsigned short n);
 unsigned int two_pexp(unsigned int n);
 char *u_long_to_hex(unsigned long num, char upper);
 
-int max_3(int a, int b, int c);
-char can_pad(fmt_info_t *f_inf);
-
 
 char *u_long_to_str(unsigned long num);
 char *long_to_str(long num);

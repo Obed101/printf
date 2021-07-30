@@ -12,9 +12,9 @@
  */
 void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 {
-	int i, len = 0, zeros_count = 0, max_w, max_p, num_len;
+	int i, len = 0, zeros_count = 0, num_len;
 	long num;
-	char *str, inv_plus, pad;
+	char *str, inv_plus;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, long);
@@ -22,7 +22,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		num = (short)va_arg(*args_list, long);
 	else
 		num = va_arg(*args_list, int);
-	str = long_to_str(num), pad = can_pad(fmt_info);
+	str = long_to_str(num);
 	if (str)
 	{
 		inv_plus = num >= 0 && (fmt_info->show_sign || fmt_info->space) ? 1 : 0;
@@ -33,13 +33,11 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		else
 		{
 			num_len = str_len(str) + (inv_plus ? 1 : 0);
-			max_w = MAX(fmt_info->width, num_len), max_p = MAX(fmt_info->prec, num_len);
-			(void)max_p;
-			if (fmt_info->is_width_set || fmt_info->is_precision_set)
-				zeros_count = ABS(max_3(fmt_info->prec + (inv_plus || num < 0 ? 1 : 0),
-					num_len, fmt_info->width) - num_len)	* (!fmt_info->left) * pad;
-			len = max_w - (NO_NEG(zeros_count) + num_len);
-			for (i = 0; !fmt_info->left && i < len && fmt_info->pad == ' '; i++)
+			if (fmt_info->is_precision_set)
+				zeros_count = MAX(fmt_info->prec + (inv_plus || num < 0 ? 1 : 0), num_len) - num_len;
+			if (fmt_info->is_width_set)
+				len = (MAX(fmt_info->width, num_len) - num_len) - zeros_count;
+			for (i = 0; !fmt_info->left && i < len; i++)
 				_putchar(fmt_info->pad);
 			if (num < 0 || inv_plus)
 				_putchar(num < 0 ? '-'
