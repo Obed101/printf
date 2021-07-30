@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include "holberton.h"
 
-
-
 /**
  * convert_fmt_di - Prints a signed integer
  * @args_list: The arguments list
@@ -24,7 +22,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		num = (short)va_arg(*args_list, long);
 	else
 		num = va_arg(*args_list, int);
-	str = long_to_str(num), pad = fmt_info->pad == '0';
+	str = long_to_str(num), pad = can_pad(fmt_info);
 	if (str)
 	{
 		inv_plus = num >= 0 && (fmt_info->show_sign || fmt_info->space) ? 1 : 0;
@@ -48,7 +46,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
 			for (i = 0; !fmt_info->left && i < len && fmt_info->pad == '0'; i++)
 				_putchar(fmt_info->pad);
-			PUT_NUM();
+			put_num(zeros_count, num, str);
 			for (i = 0; fmt_info->left && i < len; i++)
 				_putchar(' ');
 		}

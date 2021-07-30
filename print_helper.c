@@ -87,3 +87,19 @@ void set_format_error(const char *format, int *pos, int len,
 		(*pos) += len;
 	}
 }
+
+/**
+ * put_num - Prints a number to the buffer
+ * @zeros_count: The number of zeros to print
+ * @num: The number
+ * @str: The string representation of the number
+ */
+void put_num(int zeros_count, int num, char *str)
+{
+	int i;
+
+	for (i = 0; i < zeros_count; i++)
+		_putchar('0');
+	for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)\
+		_putchar(*(str + i));
+}

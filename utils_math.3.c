@@ -18,3 +18,14 @@ int max_3(int a, int b, int c)
 		largest = c;
 	return (largest);
 }
+
+/**
+ * can_pad - Checks if the given fmt_info_t can use padding.
+ * @f_inf: The format info
+ *
+ * Return: True or false
+ */
+char can_pad(fmt_info_t *f_inf)
+{
+	return (f_inf->pad == '0' || f_inf->is_precision_set);
+}

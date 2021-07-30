@@ -10,39 +10,15 @@
 #ifndef NULL
 #define NULL ((void *)0)
 #endif
-#ifndef MAX_WIDTH
 #define MAX_WIDTH "2147483647"
-#endif
-#ifndef MAX
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
-#endif
-#ifndef MIN
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-#endif
-#ifndef ABS
 #define ABS(a) ((a) > (0) ? (a) : (0 - (a)))
-#endif
-#ifndef NO_NEG
 #define NO_NEG(a) ((a) < (0) ? (0) : ((a)))
-#endif
-#ifndef NO_LESS
 #define NO_LESS(a, b) ((a) < (b) ? (b) : ((a)))
-#endif
-#ifndef TO_UPPER
 #define TO_UPPER(c) ((c) >= 'a' && (c) <= 'z' ? (c) - 6 - 26 : (c))
-#endif
-#ifndef TO_LOWER
 #define TO_LOWER(c) ((c) >= 'A' && (c) <= 'Z' ? (c) + 6 + 26 : (c))
-#endif
-#ifndef FMT_PREC_EMPTY
 #define FMT_PREC_EMPTY(fmt_inf) (fmt_inf->is_precision_set && !fmt_inf->prec)
-#endif
-#define PUT_NUM() {\
-	for (i = 0; i < zeros_count; i++)\
-		_putchar('0'); \
-			for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)\
-				_putchar(*(str + i)); \
-				} \
 
 /**
  * struct format_info - Contains information about the options
@@ -125,6 +101,7 @@ void print_repeat(char c, int n);
 void _putnchars(int n, ...);
 char is_letter(char c);
 void set_format_error(const char *, int *, int len, int, int *);
+void put_num(int zeros_count, int num, char *str);
 
 
 void init_format_info(fmt_info_t *spec);
@@ -195,6 +172,7 @@ unsigned int two_pexp(unsigned int n);
 char *u_long_to_hex(unsigned long num, char upper);
 
 int max_3(int a, int b, int c);
+char can_pad(fmt_info_t *f_inf);
 
 
 char *u_long_to_str(unsigned long num);
