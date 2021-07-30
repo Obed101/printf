@@ -84,6 +84,7 @@ void set_precision(const char *str, va_list args,
 	if (*(str + *i) == '*')
 	{
 		fmt_info->prec = va_arg(args, int);
+		(*i)++;
 	}
 	else if (is_digit(*(str + *i)))
 	{
@@ -125,7 +126,7 @@ int read_format_info(const char *str, va_list args,
 		else if ((is_digit(*(str + i)) || *(str + i) == '*') && order < 2)
 		{
 			if (*(str + i) == '*')
-				fmt_info->width = va_arg(args, int);
+				fmt_info->width = va_arg(args, int), i++;
 			else
 				i += set_number(str + i, &(fmt_info->width));
 			fmt_info->is_width_set = TRUE, order = 2;

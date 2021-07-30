@@ -32,12 +32,12 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		}
 		else
 		{
-			num_len = str_len(str) + inv_plus, max_w = MAX(fmt_info->width, num_len);
-			max_p = MAX(fmt_info->prec, num_len + (num < 0 ? -1 : 0));
+			num_len = str_len(str) + (num < 0 ? -1 : 0);
+			max_w = MAX(fmt_info->width, num_len), max_p = MAX(fmt_info->prec, num_len);
 			zeros_count = (max_p - num_len) * (!fmt_info->left);
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
-				_putchar(' ');
+				_putchar(fmt_info->pad);
 			if (num < 0 || inv_plus)
 				_putchar(num < 0 ? '-'
 					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
@@ -85,7 +85,7 @@ void convert_fmt_xX(va_list *args_list, fmt_info_t *fmt_info)
 			zeros_count = (max_p - num_len) * !fmt_info->left;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
-				_putchar(' ');
+				_putchar(fmt_info->pad);
 			if (fmt_info->alt && num)
 				_putstr(fmt_info->spec == 'X' ? "0X" : "0x");
 			for (i = 0; i < zeros_count; i++)
@@ -135,7 +135,7 @@ void convert_fmt_o(va_list *args_list, fmt_info_t *fmt_info)
 			zeros_count = (max_p - num_len) * !fmt_info->left;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
-				_putchar(' ');
+				_putchar(fmt_info->pad);
 			if (fmt_info->alt && zeros_count == 0 && num)
 				_putchar('0');
 			for (i = 0; i < zeros_count; i++)
@@ -181,7 +181,7 @@ void convert_fmt_u(va_list *args_list, fmt_info_t *fmt_info)
 			zeros_count = (max_p - num_len) * !fmt_info->left;
 			len = max_w - (NO_NEG(zeros_count) + num_len);
 			for (i = 0; !fmt_info->left && i < len; i++)
-				_putchar(' ');
+				_putchar(fmt_info->pad);
 			for (i = 0; i < zeros_count; i++)
 				_putchar('0');
 			for (i = 0; *(str + i) != '\0'; i++)
