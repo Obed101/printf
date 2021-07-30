@@ -63,12 +63,7 @@ void set_format_error(const char *format, int *pos, int len,
 	{
 		*error = -1;
 	}
-	else if (last_token == 2 && next_char == '\0')
-	{
-		*error = -1;
-		(*pos) += len - 1;
-	}
-	else if (last_token == 3 && next_char == '\0')
+	else if ((last_token == 2 || last_token == 3) && next_char == '\0')
 	{
 		*error = -1;
 		(*pos) += len - 1;
@@ -89,6 +84,6 @@ void set_format_error(const char *format, int *pos, int len,
 			if (!is_length(format[*pos + i]))
 				_putchar(format[*pos + i]);
 		}
+		(*pos) += len;
 	}
-	(*pos) += len;
 }

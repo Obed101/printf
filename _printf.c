@@ -30,7 +30,7 @@ int _printf(const char *format, ...)
 			set_format_error(format, &i, tmp, last_token, &error);
 			if (is_specifier(fmt_info.spec))
 				write_format(&args, &fmt_info);
-			i += (is_specifier(fmt_info.spec) ? tmp - 1 : 0);
+			i += (is_specifier(fmt_info.spec) ? tmp : 0);
 		}
 		else
 		{
