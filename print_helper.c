@@ -100,6 +100,6 @@ void put_num(int zeros_count, int num, char *str)
 
 	for (i = 0; i < zeros_count; i++)
 		_putchar('0');
-	for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)\
+	for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
 		_putchar(*(str + i));
 }
