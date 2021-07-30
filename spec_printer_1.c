@@ -34,7 +34,8 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		{
 			num_len = str_len(str) + (inv_plus ? 1 : 0);
 			if (fmt_info->is_precision_set)
-				zeros_count = MAX(fmt_info->prec + (inv_plus || num < 0 ? 1 : 0), num_len) - num_len;
+				zeros_count = MAX(fmt_info->prec + (inv_plus || num < 0 ? 1 : 0),
+					num_len) - num_len;
 			if (fmt_info->is_width_set)
 				len = (MAX(fmt_info->width, num_len) - num_len) - zeros_count;
 			for (i = 0; !fmt_info->left && i < len; i++)
