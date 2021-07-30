@@ -177,6 +177,7 @@ char can_pad(fmt_info_t *f_inf);
 
 char *u_long_to_str(unsigned long num);
 char *long_to_str(long num);
+char *ptr_to_str(void *ptr);
 char *is_invalid(float_info_t *flt_info);
 
 void set_float_parts(double num,	uchar_t exponent_size,

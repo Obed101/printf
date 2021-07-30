@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "holberton.h"
@@ -64,6 +65,49 @@ char *long_to_str(long num)
 			*(str + j) = '-';
 		str = trim_start(str, '0', TRUE);
 		str = num == 0 ? str_cat("0", "", FALSE) : str;
+	}
+	return (str);
+}
+
+/**
+ * ptr_to_str - Converts a pointer to its string representation
+ * @ptr: The pointer
+ *
+ * Return: The string representation of the pointer
+ */
+char *ptr_to_str(void *ptr)
+{
+	int i, size;
+	uintptr_t tmp = (uintptr_t)ptr;
+	char *str, *str0;
+
+	size = sizeof(ptr) * 2;
+	str = malloc(sizeof(char) * (size + 1));
+	if (str)
+	{
+		str0 = malloc(sizeof(char) * (2 + 1));
+		if (str0)
+		{
+			mem_set(str, size, '0');
+			for (i = 0; i < size; i++)
+			{
+				*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
+					: (tmp % 16) - 10 + 'a';
+				tmp /= 16;
+			}
+			*(str + i) = '\0';
+			*(str0 + 0) = '0';
+			*(str0 + 1) = 'x';
+			*(str0 + 2) = '\0';
+			rev_string(str);
+			str = trim_start(str, '0', TRUE);
+			str = *str == '\0' ? str_cat("0", "", FALSE) : str;
+			str = str_cat(str0, str, TRUE);
+		}
+		else
+		{
+			free(str);
+		}
 	}
 	return (str);
 }
