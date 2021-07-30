@@ -16,7 +16,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 {
 	int i, len = 0, zeros_count = 0, max_w, max_p, num_len;
 	long num;
-	char *str, inv_plus, pad = fmt_info->pad == '0';
+	char *str, inv_plus, pad;
 
 	if (fmt_info->is_long)
 		num = va_arg(*args_list, long);
@@ -24,7 +24,7 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		num = (short)va_arg(*args_list, long);
 	else
 		num = va_arg(*args_list, int);
-	str = long_to_str(num);
+	str = long_to_str(num), pad = fmt_info->pad == '0';
 	if (str)
 	{
 		inv_plus = num >= 0 && (fmt_info->show_sign || fmt_info->space) ? 1 : 0;
