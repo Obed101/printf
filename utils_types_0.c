@@ -78,36 +78,42 @@ char *long_to_str(long num)
 char *ptr_to_str(void *ptr)
 {
 	int i, size;
-	uintptr_t tmp = (uintptr_t)ptr;
+	uintptr_t tmp;
 	char *str, *str0;
 
-	size = sizeof(ptr) * 2;
-	str = malloc(sizeof(char) * (size + 1));
-	if (str)
+	if (ptr)
 	{
-		str0 = malloc(sizeof(char) * (2 + 1));
-		if (str0)
+		tmp = (uintptr_t)ptr;
+		size = sizeof(ptr) * 2;
+		str = malloc(sizeof(char) * (size + 1));
+		if (str)
 		{
-			mem_set(str, size, '0');
-			for (i = 0; i < size; i++)
+			str0 = malloc(sizeof(char) * (2 + 1));
+			if (str0)
 			{
-				*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
-					: (tmp % 16) - 10 + 'a';
-				tmp /= 16;
+				mem_set(str, size, '0');
+				for (i = 0; i < size; i++)
+				{
+					*(str + i) = (tmp % 16) < 10 ? (tmp % 16) + '0'
+						: (tmp % 16) - 10 + 'a';
+					tmp /= 16;
+				}
+				*(str + i) = '\0';
+				*(str0 + 0) = '0';
+				*(str0 + 1) = 'x';
+				*(str0 + 2) = '\0';
+				rev_string(str);
+				str = trim_start(str, '0', TRUE);
+				str = *str == '\0' ? str_cat("0", "", FALSE) : str;
+				str = str_cat(str0, str, TRUE);
 			}
-			*(str + i) = '\0';
-			*(str0 + 0) = '0';
-			*(str0 + 1) = 'x';
-			*(str0 + 2) = '\0';
-			rev_string(str);
-			str = trim_start(str, '0', TRUE);
-			str = *str == '\0' ? str_cat("0", "", FALSE) : str;
-			str = str_cat(str0, str, TRUE);
+			if (!str0)
+				free(str);
 		}
-		else
-		{
-			free(str);
-		}
+	}
+	else
+	{
+		str = str_copy("(nil)");
 	}
 	return (str);
 }
