@@ -101,7 +101,7 @@ void print_repeat(char c, int n);
 void _putnchars(int n, ...);
 char is_letter(char c);
 void set_format_error(const char *, int *, int len, int, int *);
-void put_num(int zeros_count, int num, char *str);
+void put_num(int zeros_count, long num, char *str);
 
 
 void init_format_info(fmt_info_t *spec);

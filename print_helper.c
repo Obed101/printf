@@ -94,7 +94,7 @@ void set_format_error(const char *format, int *pos, int len,
  * @num: The number
  * @str: The string representation of the number
  */
-void put_num(int zeros_count, int num, char *str)
+void put_num(int zeros_count, long num, char *str)
 {
 	int i;
 
