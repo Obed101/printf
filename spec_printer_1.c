@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "holberton.h"
 
+
+
 /**
  * convert_fmt_di - Prints a signed integer
  * @args_list: The arguments list
@@ -32,19 +34,20 @@ void convert_fmt_di(va_list *args_list, fmt_info_t *fmt_info)
 		}
 		else
 		{
-			num_len = str_len(str) + (num < 0 ? -1 : 0);
+			num_len = str_len(str) + (inv_plus ? 1 : 0);
 			max_w = MAX(fmt_info->width, num_len), max_p = MAX(fmt_info->prec, num_len);
-			zeros_count = (max_p - num_len) * (!fmt_info->left);
+			if (fmt_info->is_width_set || fmt_info->is_precision_set)
+				zeros_count = (MAX(max_p + (inv_plus || num < 0 ? 1 : 0),
+					max_w) - num_len)	* (!fmt_info->left);
 			len = max_w - (NO_NEG(zeros_count) + num_len);
-			for (i = 0; !fmt_info->left && i < len; i++)
+			for (i = 0; !fmt_info->left && i < len && fmt_info->pad == ' '; i++)
 				_putchar(fmt_info->pad);
 			if (num < 0 || inv_plus)
 				_putchar(num < 0 ? '-'
 					: (fmt_info->space && !fmt_info->show_sign ? ' ' : '+'));
-			for (i = 0; i < zeros_count; i++)
-				_putchar('0');
-			for (i = num < 0 ? 1 : 0; *(str + i) != '\0'; i++)
-				_putchar(*(str + i));
+			for (i = 0; !fmt_info->left && i < len && fmt_info->pad == '0'; i++)
+				_putchar(fmt_info->pad);
+			PUT_NUM();
 			for (i = 0; fmt_info->left && i < len; i++)
 				_putchar(' ');
 		}
