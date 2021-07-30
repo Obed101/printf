@@ -117,6 +117,8 @@ void write_format(va_list *args_list, fmt_info_t *fmt_info);
 
 void print_repeat(char c, int n);
 void _putnchars(int n, ...);
+char is_letter(char c);
+int print_unknown_spec(const char *format, int pos, int length);
 
 
 void init_format_info(fmt_info_t *spec);

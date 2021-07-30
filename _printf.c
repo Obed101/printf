@@ -29,13 +29,11 @@ int _printf(const char *format, ...)
 			processing_escape = FALSE;
 			if (is_specifier(fmt_info.spec))
 				write_format(&args, &fmt_info);
-			else if (*(format + ABS(tmp) + 1) == '\0')
+			else if (is_length(format[ABS(tmp)]) && format[ABS(tmp) + 1] == '\0')
 				error = 1;
-			else if (*(format + ABS(tmp) + 1) == '\n')
-				_putnchars(2, '%', '\n');
 			else
-				_putnchars(2, '%', *(format + i));
-			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : ABS(tmp) - 1));
+				i += print_unknown_spec(format, i, ABS(tmp));
+			i += (tmp > 0 ? tmp : (error ? ABS(tmp) : 0));
 		}
 		else
 		{
